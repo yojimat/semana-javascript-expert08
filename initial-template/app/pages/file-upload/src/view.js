@@ -55,4 +55,17 @@ export default class View {
       this.#fileUpload.click()
     })
   }
+
+  downloadBlobAsFile(buffers, fileName) {
+    // console.log('View dowloadBlobAsFile', buffers, fileName)
+    const blob = new Blob(buffers, { type: 'video/webm' })
+    const blobUrl = URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.href = blobUrl
+    a.download = fileName
+    a.click()  
+
+    URL.revokeObjectURL(blobUrl)
+  }
 }

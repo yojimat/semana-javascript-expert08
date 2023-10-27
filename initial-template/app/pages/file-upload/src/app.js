@@ -8,11 +8,12 @@ const worker = new Worker('./src/workers/worker.js', { type: 'module' })
 let tick = ''
 
 worker.onmessage = ({ data }) => {
-    const { status, message } = data
+    const { status, message, buffers, fileName } = data
     if (status !== 'done') return;
     clock.stop()
-    view.updateElapsedTime(`Process took ${tick}`)
+    view.updateElapsedTime(`Process took ${tick.replace('ago', '')}`)
     console.log('Message received in the view process: ', message)
+    // view.downloadBlobAsFile(buffers, fileName)
 }
 worker.onerror = (ev) => {
     console.error('Error in the worker', ev)

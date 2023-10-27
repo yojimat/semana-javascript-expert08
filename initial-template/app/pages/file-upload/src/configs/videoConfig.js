@@ -31,7 +31,13 @@ const encoderConfigMP4 = {
   avc: { format: 'annexb' },
 }
 
+const webmWriterConfig = {
+  ...encoderConfigWebM,
+  codec: 'VP9'
+}
+
 export {
   encoderConfigMP4,
-  encoderConfigWebM
+  encoderConfigWebM,
+  webmWriterConfig 
 }
