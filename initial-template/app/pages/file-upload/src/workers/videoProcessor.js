@@ -156,13 +156,14 @@ export default class VideoProcessor {
     // console.log('Video Processor upload: ', fileName, resolution, type)
     let chunks = []
     let byteCount = 0
+    let segmentCount = 0
 
     const triggerUpload = async chunks => {
       const blob = new Blob(chunks, { type: 'video/webm' })
       // console.log('Video Processor local fn triggerUpload: ', blob)
 
       await this.#service.uploadFile({
-        fileName: fileName.concat('-144p.webm'),
+        fileName: `${fileName}-${resolution}.${++segmentCount}.${type}`,
         fileBuffer: blob
       })
 
@@ -180,7 +181,7 @@ export default class VideoProcessor {
       write: async ({ data }) => {
         chunks.push(data)
         // console.log('Video Processor upload write: ', data)
-        if (byteCount <= 10e6) return
+        if (byteCount < 10e6) return
         await triggerUpload(chunks)
       },
       close: async () => {
@@ -219,5 +220,6 @@ export default class VideoProcessor {
     // renderFrame(frame)
     //   }
     // }))
+    sendMessage({status: 'done', message: "File processed"})
   }
 }
