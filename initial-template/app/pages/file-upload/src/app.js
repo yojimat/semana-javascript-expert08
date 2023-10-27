@@ -14,9 +14,14 @@ worker.onmessage = ({ data }) => {
     view.updateElapsedTime(`Process took ${tick}`)
     console.log('Message received in the view process: ', message)
 }
+worker.onerror = (ev) => {
+    console.error('Error in the worker', ev)
+}
 
 view.configureOnFileChange(file => {
-    worker.postMessage({ file })
+    const canvas = view.getCanvas()
+
+    worker.postMessage({ file, canvas }, [canvas])
 
     // The function passed as argument is called every tick.
     clock.start((time) => {
